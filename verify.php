@@ -52,7 +52,6 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
     </div>
     <script src="assets/jquery-3.7.0.min.js"></script>
     <script src="assets/bootstrap.bundle.min.js"></script>
-    <script src="assets/scripts.js"></script>
 </body>
 
 </html>
