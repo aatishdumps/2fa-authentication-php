@@ -9,20 +9,20 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
         $user = $result->fetch_assoc();
         if ($token == $user['token']) {
             $status = 'success';
-            $message = "Your account has been activated. Please <a href='index.php'>click here to login.</a>";
+            $message = 'Your account has been activated. Please <a href="index.php">click here to login.</a>';
             $query = "UPDATE users SET token = NULL WHERE email = '$email';";
             $conn->query($query);
         } else {
             $status = 'error';
-            $message = "The verification token is invalid. Please try again.";
+            $message = 'The verification token is invalid. Please try again.';
         }
     } else {
         $status = 'error';
-        $message = "The email is not associated with any account. Please try again.";
+        $message = 'The email is not associated with any account. Please try again.';
     }
 } else {
     $status = 'error';
-    $message = "Email and/or token is missing from url. Please try again.";
+    $message = 'Email and/or token is missing from url. Please try again.';
 }
 ?>
 <!DOCTYPE html>
@@ -50,8 +50,8 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
     <div class="container d-flex justify-content-center align-items-center h-100 flex-column">
         <div id="alerts">
             <?php
-            $color = $status ==  'success' ? 'success' : 'danger';
-            echo '<div class="alert alert-' . $color . '>' . $message . '</div>';
+            $color = ($status ==  'success') ? 'success' : 'danger';
+            echo "<div class='alert alert-$color'>$message</div>";
             ?>
         </div>
     </div>

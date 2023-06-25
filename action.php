@@ -28,11 +28,11 @@ switch ($action) {
                 $status = 'twofactor';
                 $message = "A 2FA code has been sent to your email address, please enter it in the below field.";
                 $storedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-                $user = $result->fetch_assoc();
                 $user_id = $user['userid'];
                 $name = $user['name'];
                 $updateQuery = "UPDATE users SET two_fa_code = '$storedCode' WHERE userid = '$user_id'";
                 $conn->query($updateQuery);
+                $mail = new PHPMailer(true);
                 try {
                     // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
                     $mail->SMTPDebug = 0;
@@ -47,10 +47,10 @@ switch ($action) {
                     $mail->addAddress($email);
                     $mail->isHTML(false);
                     $mail->Subject = 'Verify your email address';
-                    $message = "Dear $name,\n\nThank you for registering. Your 2FA code is:\n\n";
-                    $message .= "<h2>$storedCode</h2>\n\n";
-                    $message .= "Best regards,\nThe IWD Project Team";
-                    $mail->Body = $message;
+                    $msg = "Dear $name,\n\nThank you for registering. Your 2FA code is:\n\n";
+                    $msg .= "<h2>$storedCode</h2>\n\n";
+                    $msg .= "Best regards,\nThe IWD Project Team";
+                    $mail->Body = $msg;
                     $mail->send();
                 } catch (Exception $e) {
                     // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
@@ -143,10 +143,10 @@ switch ($action) {
                     $mail->addAddress($email);
                     $mail->isHTML(false);
                     $mail->Subject = 'Verify your email address';
-                    $message = "Dear $name,\n\nThank you for registering. Please click the following link to verify your email:\n\n";
-                    $message .= "https://example.com/verify.php?email=" . urlencode($email) . "&token=" . urlencode($token) . "\n\n";
-                    $message .= "If you did not register on our website, please ignore this email.\n\nBest regards,\nThe IWD Project Team";
-                    $mail->Body = $message;
+                    $msg = "Dear $name,\n\nThank you for registering. Please click the following link to verify your email:\n\n";
+                    $msg .= "https://example.com/verify.php?email=" . urlencode($email) . "&token=" . urlencode($token) . "\n\n";
+                    $msg .= "If you did not register on our website, please ignore this email.\n\nBest regards,\nThe IWD Project Team";
+                    $mail->Body = $msg;
                     $mail->send();
                 } catch (Exception $e) {
                     // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
