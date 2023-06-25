@@ -162,6 +162,7 @@ switch ($action) {
         }
         break;
 }
+// close connection
 $conn->close();
 header('Content-Type: application/json');
 echo json_encode($response);
