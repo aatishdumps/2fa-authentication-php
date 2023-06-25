@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once('./includes/conn.php');
 require_once('./includes/functions.php');
 
@@ -76,6 +77,8 @@ switch ($action) {
                 $status = 'success';
                 $message = "Logged in successfully! Please wait...";
                 $user_id = $user['userid'];
+                $_SESSION['loggedIn'] = true;
+                $_SESSION['userid'] = $user_id;
                 $updateQuery = "UPDATE users SET two_fa_code = 0 WHERE userid = '$user_id'";
                 $conn->query($updateQuery);
             } else {
@@ -159,5 +162,6 @@ switch ($action) {
         }
         break;
 }
+$conn->close();
 header('Content-Type: application/json');
 echo json_encode($response);
