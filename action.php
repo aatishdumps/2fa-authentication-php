@@ -25,7 +25,7 @@ $mail->Username   = '';
 $mail->Password   = '';
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port       = 587;
-$mail->setFrom('example@example.com', 'IWD Project');
+$mail->setFrom('');
 
 $action = $_POST['action'];
 switch ($action) {
