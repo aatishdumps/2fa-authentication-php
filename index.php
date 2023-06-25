@@ -10,14 +10,6 @@
         body {
             height: 100%;
         }
-
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8f9fa;
-        }
-
         .card,
         #alerts {
             width: 400px;
