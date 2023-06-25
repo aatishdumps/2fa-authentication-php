@@ -1,5 +1,9 @@
 <?php
 session_start();
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    header('HTTP/1.1 400 Bad Request');
+    exit;
+}
 require_once('./includes/conn.php');
 require_once('./includes/functions.php');
 
@@ -11,10 +15,19 @@ require_once  __DIR__ . '/PHPMailer/Exception.php';
 require_once  __DIR__ . '/PHPMailer/PHPMailer.php';
 require_once  __DIR__ . '/PHPMailer/SMTP.php';
 
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    header('HTTP/1.1 400 Bad Request');
-    exit;
-}
+// mailer configuration
+$mail = new PHPMailer(true);
+// $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+$mail->SMTPDebug = 0;
+$mail->isSMTP();
+$mail->Host       = 'smtp-relay.sendinblue.com';
+$mail->SMTPAuth   = true;
+$mail->Username   = 'aatishk60@gmail.com';
+$mail->Password   = 'xsmtpsib-51b55900ba976dfbae99f784322644a2581b4fa39df4a0c7434e0ffa653c9aec-BLtUKI947ycPQsh0';
+$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+$mail->Port       = 587;
+$mail->setFrom('aatishk60@gmail.com', 'IWD Project');
+
 $action = $_POST['action'];
 switch ($action) {
     case 'login':
@@ -32,18 +45,7 @@ switch ($action) {
                 $name = $user['name'];
                 $updateQuery = "UPDATE users SET two_fa_code = '$storedCode' WHERE userid = '$user_id'";
                 $conn->query($updateQuery);
-                $mail = new PHPMailer(true);
                 try {
-                    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-                    $mail->SMTPDebug = 0;
-                    $mail->isSMTP();
-                    $mail->Host       = 'smtp-relay.sendinblue.com';
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = 'aatishk60@gmail.com';
-                    $mail->Password   = 'Wqhr7G5k4N6ZtOfS';
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
-                    $mail->setFrom('aatishk60@gmail.com', 'IWD Project');
                     $mail->addAddress($email);
                     $mail->isHTML(false);
                     $mail->Subject = 'Verify your email address';
@@ -128,18 +130,7 @@ switch ($action) {
             $hashedPassword = md5($password);
             $query = "INSERT INTO users (name, email, password, token) VALUES ('$name', '$email', '$hashedPassword', '$token')";
             if ($conn->query($query) === TRUE) {
-                $mail = new PHPMailer(true);
                 try {
-                    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
-                    $mail->SMTPDebug = 0;
-                    $mail->isSMTP();
-                    $mail->Host       = 'smtp-relay.sendinblue.com';
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = 'aatishk60@gmail.com';
-                    $mail->Password   = 'Wqhr7G5k4N6ZtOfS';
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 587;
-                    $mail->setFrom('aatishk60@gmail.com', 'IWD Project');
                     $mail->addAddress($email);
                     $mail->isHTML(false);
                     $mail->Subject = 'Verify your email address';
