@@ -4,11 +4,9 @@ require_once('./includes/functions.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use PHPMailer\PHPMailer\SMTP;
 
 require_once  __DIR__ . '/PHPMailer/Exception.php';
 require_once  __DIR__ . '/PHPMailer/PHPMailer.php';
-require_once  __DIR__ . '/PHPMailer/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 400 Bad Request');
@@ -26,11 +24,34 @@ switch ($action) {
             if (!isset($user['token'])) {
                 $status = 'twofactor';
                 $message = "A 2FA code has been sent to your email address, please enter it in the below field.";
-                $user = $result->fetch_assoc();
                 $storedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                $user = $result->fetch_assoc();
                 $user_id = $user['userid'];
+                $name = $user['name'];
                 $updateQuery = "UPDATE users SET two_fa_code = '$storedCode' WHERE userid = '$user_id'";
                 $conn->query($updateQuery);
+                try {
+                    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                    $mail->SMTPDebug = 0;
+                    $mail->isSMTP();
+                    $mail->Host       = 'smtp-relay.sendinblue.com';
+                    $mail->SMTPAuth   = true;
+                    $mail->Username   = 'aatishk60@gmail.com';
+                    $mail->Password   = 'Wqhr7G5k4N6ZtOfS';
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                    $mail->Port       = 587;
+                    $mail->setFrom('aatishk60@gmail.com', 'IWD Project');
+                    $mail->addAddress($email);
+                    $mail->isHTML(false);
+                    $mail->Subject = 'Verify your email address';
+                    $message = "Dear $name,\n\nThank you for registering. Your 2FA code is:\n\n";
+                    $message .= "<h2>$storedCode</h2>\n\n";
+                    $message .= "Best regards,\nThe IWD Project Team";
+                    $mail->Body = $message;
+                    $mail->send();
+                } catch (Exception $e) {
+                    // echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                }
             } else {
                 $status = 'error';
                 $message = "Your account is not verified. Please verify your email or contact admin.";
@@ -113,13 +134,13 @@ switch ($action) {
                     $mail->Password   = 'Wqhr7G5k4N6ZtOfS';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port       = 587;
-                    $mail->setFrom('aatishk60@gmail.com', 'Aatish IWD PHP');
+                    $mail->setFrom('aatishk60@gmail.com', 'IWD Project');
                     $mail->addAddress($email);
                     $mail->isHTML(false);
                     $mail->Subject = 'Verify your email address';
                     $message = "Dear $name,\n\nThank you for registering. Please click the following link to verify your email:\n\n";
-                    $message .= "http://example.com/verify.php?email=" . urlencode($email) . "&token=" . urlencode($token) . "\n\n";
-                    $message .= "If you did not register on our website, please ignore this email.\n\nBest regards,\nThe Example Team";
+                    $message .= "https://example.com/verify.php?email=" . urlencode($email) . "&token=" . urlencode($token) . "\n\n";
+                    $message .= "If you did not register on our website, please ignore this email.\n\nBest regards,\nThe IWD Project Team";
                     $mail->Body = $message;
                     $mail->send();
                 } catch (Exception $e) {
