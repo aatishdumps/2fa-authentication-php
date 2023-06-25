@@ -48,7 +48,7 @@ switch ($action) {
                 try {
                     $mail->addAddress($email);
                     $mail->isHTML(false);
-                    $mail->Subject = 'Verify your email address';
+                    $mail->Subject = '2 Factor Authentication Code For Login';
                     $msg = "Dear $name,\n\nThank you for registering. Your 2FA code is:\n\n";
                     $msg .= "<h2>$storedCode</h2>\n\n";
                     $msg .= "Best regards,\nThe IWD Project Team";
