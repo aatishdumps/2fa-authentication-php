@@ -20,13 +20,13 @@ $mail = new PHPMailer(true);
 // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
 $mail->SMTPDebug = 0;
 $mail->isSMTP();
-$mail->Host       = 'smtp-relay.sendinblue.com';
+$mail->Host       = '';
 $mail->SMTPAuth   = true;
-$mail->Username   = 'aatishk60@gmail.com';
-$mail->Password   = 'xsmtpsib-51b55900ba976dfbae99f784322644a2581b4fa39df4a0c7434e0ffa653c9aec-BLtUKI947ycPQsh0';
+$mail->Username   = '';
+$mail->Password   = '';
 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
 $mail->Port       = 587;
-$mail->setFrom('aatishk60@gmail.com', 'IWD Project');
+$mail->setFrom('example@example.com', 'IWD Project');
 
 $action = $_POST['action'];
 switch ($action) {
