@@ -10,6 +10,8 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
         if ($token == $user['token']) {
             $status = 'success';
             $message = "Your account has been activated. Please <a href='index.php'>click here to login.</a>";
+            $query = "UPDATE users SET token = NULL WHERE email = '$email';";
+            $conn->query($query);
         } else {
             $status = 'error';
             $message = "The verification token is invalid. Please try again.";

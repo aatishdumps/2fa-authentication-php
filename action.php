@@ -5,9 +5,11 @@ require_once('./includes/functions.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\SMTP;
 
 require_once  __DIR__ . '/PHPMailer/Exception.php';
 require_once  __DIR__ . '/PHPMailer/PHPMailer.php';
+require_once  __DIR__ . '/PHPMailer/SMTP.php';
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 400 Bad Request');
