@@ -22,13 +22,19 @@ switch ($action) {
         $query = "SELECT * FROM users WHERE email = '$email' AND password = '$password'";
         $result = $conn->query($query);
         if ($result->num_rows > 0) {
-            $status = 'twofactor';
-            $message = "A 2FA code has been sent to your email address, please enter it in the below field.";
             $user = $result->fetch_assoc();
-            $storedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
-            $user_id = $user['userid'];
-            $updateQuery = "UPDATE users SET two_fa_code = '$storedCode' WHERE userid = '$user_id'";
-            $conn->query($updateQuery);
+            if (!isset($user['token'])) {
+                $status = 'twofactor';
+                $message = "A 2FA code has been sent to your email address, please enter it in the below field.";
+                $user = $result->fetch_assoc();
+                $storedCode = str_pad(rand(0, 999999), 6, '0', STR_PAD_LEFT);
+                $user_id = $user['userid'];
+                $updateQuery = "UPDATE users SET two_fa_code = '$storedCode' WHERE userid = '$user_id'";
+                $conn->query($updateQuery);
+            } else {
+                $status = 'error';
+                $message = "Your account is not verified. Please verify your email or contact admin.";
+            }
         } else {
             $status = 'error';
             $message = "Sorry, email or password is incorrect";
