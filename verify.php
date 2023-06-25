@@ -20,6 +20,9 @@ if (isset($_GET['email']) && isset($_GET['token'])) {
         $status = 'error';
         $message = "The email is not associated with any account. Please try again.";
     }
+} else {
+    $status = 'error';
+    $message = "Email and/or token is missing from url. Please try again.";
 }
 ?>
 <!DOCTYPE html>
