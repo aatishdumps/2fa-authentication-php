@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once('./includes/conn.php');
-require_once('./includes/functions.php');
+
 if (isset($_SESSION['loggedIn']) && $_SESSION['loggedIn'] == true) {
     $userid = $_SESSION['userid'];
     $query = "SELECT * FROM users where userid=$userid;";

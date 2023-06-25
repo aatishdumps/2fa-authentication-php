@@ -5,7 +5,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     exit;
 }
 require_once('./includes/conn.php');
-require_once('./includes/functions.php');
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -111,8 +110,11 @@ switch ($action) {
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Invalid email format.";
         } else {
-            if (isExists('email', $email))
+            $xquery = "SELECT * FROM users WHERE email = '$email'";
+            $xresult = $conn->query($xquery);
+            if ($xresult->num_rows > 0) {
                 $errors[] = "Email already exists.";
+            }
         }
 
         if (empty($password)) {
